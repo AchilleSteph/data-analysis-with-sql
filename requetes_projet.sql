@@ -1,5 +1,33 @@
 USE mintclassics;
 
+--- operations in warehouses
+
+select w.warehouseCode, w.warehouseName, SUM(p.quantityInStock) as unitsStored
+from warehouses as w
+join products as p on p.warehouseCode = w.warehouseCode
+group by w.warehouseCode, w.warehouseName
+order by unitsStored desc;
+
+select p.productName, w.warehouseName, SUM(p.quantityInStock) as unitsStored
+from products as p
+join warehouses as w on w.warehouseCode = p.warehouseCode
+group by quantityInStock
+order by unitsStored;
+
+select productName,
+       sum(if(warehouseName = 'North', unitsStored, 0)) as NORTH,
+	   sum(if(warehousename = 'South', unitsStored, 0)) as SOUTH,
+       sum(if(warehousename = 'West', unitsStored, 0)) as WEST,
+	   sum(if(warehousename = 'East', unitsStored, 0)) as EAST
+from (select p.productName, w.warehouseName, SUM(p.quantityInStock) as unitsStored
+      from products as p
+      join warehouses as w on w.warehouseCode = p.warehouseCode
+      group by quantityInStock
+      order by unitsStored
+	 ) as productInventory
+group by productName;
+
+
 --- products sold ---
 select p.productCode, p.productName, p.quantityInStock, SUM(od.quantityOrdered) as totalSales 
 from products as p
@@ -18,25 +46,12 @@ where (quantityInStock - totalSales) > 0
 group by productCode, productName, quantityInStock
 order by inventoryremaining desc;
 
---- operations in warehouses
-
-select w.warehouseCode, w.warehouseName, SUM(p.quantityInStock) as unitsStored
-from warehouses as w
-join products as p on p.warehouseCode = w.warehouseCode
-group by w.warehouseCode, w.warehouseName
-order by unitsStored desc;
-
-select p.productName, w.warehouseName, SUM(p.quantityInStock) as unitsStored
-from products as p
-join warehouses as w on w.warehouseCode = p.warehouseCode
-group by quantityInStock
-order by unitsStored;
 
 --- customer Payment and credit limit ---
-select ct.customerNumber, ct.creditLimit, sum(amount) as totalAmount 
+select ct.customerNumber, customerName, ct.creditLimit, sum(amount) as totalAmount 
 from payments as py
 join customers as ct on ct.customerNumber = py.customerNumber
-group by ct.customerNumber, ct.creditLimit;
+group by ct.customerNumber, customerName, ct.creditLimit;
 
 --
 select *,
@@ -45,10 +60,10 @@ select *,
            else 'Good'
        end as credit_risk
 from (
-      select ct.customerNumber, ct.creditLimit, sum(amount) as totalAmount 
+      select ct.customerNumber, customerName, ct.creditLimit, sum(amount) as totalAmount 
       from payments as py
       join customers as ct on ct.customerNumber = py.customerNumber
-      group by ct.customerNumber, ct.creditLimit
+      group by ct.customerNumber, customerName, ct.creditLimit
      ) as creditAndPayments;
 
 --- relationship between products prices and sales ---
@@ -59,13 +74,13 @@ join orderdetails as od on p.productCode = od.productCode
 group by p.productCode, p.productname, p.buyPrice
 order by p.buyPrice desc;
 
---- valuable customers, total purchases ---
-select cu.customerName, cu.addressLine1, cu.country, sum(od.quantityOrdered) as totalPurchases
+--- valuable customers, total amount of purchases ---
+select cu.customerName, cu.addressLine1, cu.country, sum(od.quantityOrdered) as totalAmountOfPurchases
 from customers as cu
 join orders as ord on ord.customerNumber = cu.customerNumber
 join orderdetails as od on od.orderNumber = ord.orderNumber
 group by cu.customerName, cu.addressLine1, cu.country
-order by totalPurchases desc;
+order by totalAmountOfPurchases desc;
 
 --- valuable customers, number of purchases ---
 select cu.customerName, cu.addressLine1, cu.country, count(ord.orderNumber) as totalPurchases
@@ -92,9 +107,10 @@ join orderdetails as od on od.orderNumber = ord.orderNumber
 group by ee.employeeNumber, ee.lastName, ee.firstName
 order by totalAmountSalesPerEmployee desc;
 
---- most succefull product, percentage of sales over quantity in stock ---
-select p.productCode, p.productName, sum(p.quantityInStock) as totalInventory,
-sum(od.quantityOrdered) as totalSales,
+--- most successfull products,  sales versus initial stock ---
+select p.productCode, p.productName, 
+sum(p.quantityInStock) as totalInventory,
+sum(od.quantityOrdered) as totalNumberOfSales,
 sum(od.priceEach*od.quantityOrdered) as totalAmountSales 
 from products as p
 join orderdetails as od on od.productCode = p.productCode

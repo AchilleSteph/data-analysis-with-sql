@@ -1,0 +1,26 @@
+recommendation policies:
+
+-	A basic inventory analysis shows three products that are highly undersold, compared to 
+        their initial stock quantities. They are 1969 ford Falcon, P-51-D Mustang and 
+        Diamond T620 Semi-skirted Tanker from respectively warehouse EAST, SOUTH and NORTH. 
+        The company should stop marketing them and free up the space that they occupy in the 
+        warehouses, as well the other resources allocated to manage them.
+
+-	Many of customers experience credit limit issue. I will recommend to discuss with them 
+        on the plan (at least a payment plan) that they intent to apply to solve the balance. 
+
+-	Over the 98 customers who was recorded, on 2 of them Euro+Shopping Channel from Spain 
+        and Mini Gifts Distributors Ltd from USA got the highest rates of sales, with 26 and 17 units 
+        of sales respectively. The other customers got 5 or less. This finding need to be supported 
+        by a client experience (online survey) for a better understanding of this big difference 
+        between the two groups of customers and address  the best CRM to attract the worst customers.
+ 
+-	Over the whole team of 15 employees, only five employees were not able to cross the benchmark 
+        of 500,000$ of sales. Managers will improve the production incentive policy and encourage 
+        sharing of experiences during meeting to help them learn from other employees.
+  
+-	The most successful product lines are ships, trucks and buses that are realistic replicas of old models. 
+        Some of them include a certificate of authenticity from their manufacturers. These models are usually 
+        suitable for present, home and office ornament. Company should ensure a better supply for this kind of 
+        products and adopt good price policy for customers who are looking for presents for anniversaries, 
+        gift to a co-worker and more.
